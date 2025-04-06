@@ -1,19 +1,10 @@
 import express from 'express';
-
+import userRoutes from "./v1/userRoutes.js"
+import authRoutes from "./v1/authRoutes.js"
 const routes = express.Router();
 
-// GET request to get all users 
+// Post request user routes 
+routes.use('/user', userRoutes);
 
-routes.get('/users', (req, res) => {
-    // Mock data
-    const users = [
-        { id: 1, name: 'John Doe', email: 'john@example.com' },
-        { id: 2, name: 'Jane Smith', email: 'jane@example.com' },
-        { id: 3, name: 'Alice Johnson', email: 'alice@example.com' }
-    ];
-
-    res.json(users);
-});
-
-
+routes.use("/auth", authRoutes);
 export default routes;
