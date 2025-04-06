@@ -29,21 +29,45 @@ export const register = async (req, res) => {
 };
 
 
-export const login = async (req, res) => {
-    try {
-        const { identifier, password } = req.body;
-        const data = await loginUser({ identifier, password });
-        res.status(200).json({
-            success: true,
-            message: "Login successful",
-            ...data,
-        });
-    } catch (err) {
-        res.status(401).json({
-            success: false,
-            message: err.message || "Login failed",
-        });
-    }
-};
+// export const login = async (req, res) => {
+//     try {
+//         const { identifier, password } = req.body;
+//         const data = await loginUser({ identifier, password });
+//         res.status(200).json({
+//             success: true,
+//             message: "Login successful",
+//             ...data,
+//         });
+//     } catch (err) {
+//         res.status(401).json({
+//             success: false,
+//             message: err.message || "Login failed",
+//         });
+//     }
+// };
 
+export const login = async (req, res) => {
+  try {
+    const { identifier, password } = req.body;
+    const { token, user } = await loginUser({ identifier, password });
+
+    // ✅ Set cookie here
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production", // true in production
+      sameSite: "Lax", // or "None" + secure:true for cross-site
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+    });
+
+    res.status(200).json({
+      success: true,
+      message: "Login successful",
+      user,
+      token,
+    });
+
+  } catch (err) {
+    res.status(401).json({ success: false, message: err.message });
+  }
+};
 

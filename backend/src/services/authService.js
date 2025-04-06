@@ -73,6 +73,7 @@ export const loginUser = async({ identifier, password }) => {
         expiresIn: "7d",
     });
 
+
     return {
         token,
         user: {
