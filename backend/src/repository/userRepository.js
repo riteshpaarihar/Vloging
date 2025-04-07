@@ -21,7 +21,7 @@ export const findUserByUsermobileNumber = async(mobileNumber) => {
 export const findUserByEmailOrMobile = async(identifier) => {
     return await User.findOne({
         $or: [{ email: identifier }, { mobileNumber: identifier }],
-    }).select("+password"); // include password field
+    }).select("username email role profileImage +password"); // ✅ Include all needed fields
 };
 
 
