@@ -17,21 +17,45 @@ export const requestPasswordReset = async(req, res) => {
     res.json({ success: true, message: 'Password reset link sent' });
 };
 
+// export const resetPassword = async(req, res) => {
+
+//     const { token } = req.params;
+//     const { password } = req.body;
+
+//     try {
+//         const decoded = jwt.verify(token, JWT_SECRET);
+//         const user = await findUserByResetToken(token); // Or verify id from decoded
+
+//         if (!user) return res.status(400).json({ success: false, message: 'Invalid or expired token' });
+
+//         const hashedPassword = await bcrypt.hash(password, 10);
+//         await updateUserPassword(user._id, hashedPassword);
+
+//         res.json({ success: true, message: 'Password reset successful' });
+//     } catch (err) {
+//         res.status(400).json({ success: false, message: 'Invalid or expired token' });
+//     }
+// };
+
+
 export const resetPassword = async(req, res) => {
     const { token } = req.params;
     const { password } = req.body;
 
     try {
-        const decoded = jwt.verify(token, JWT_SECRET);
-        const user = await findUserByResetToken(token); // Or verify id from decoded
+        const decoded = jwt.verify(token, JWT_SECRET); // throws if expired
 
-        if (!user) return res.status(400).json({ success: false, message: 'Invalid or expired token' });
+        // Match token from DB
+        const user = await findUserByResetToken(token);
+        if (!user || user._id.toString() !== decoded.id) {
+            return res.status(400).json({ success: false, message: 'Invalid or expired token' });
+        }
 
         const hashedPassword = await bcrypt.hash(password, 10);
         await updateUserPassword(user._id, hashedPassword);
 
         res.json({ success: true, message: 'Password reset successful' });
     } catch (err) {
-        res.status(400).json({ success: false, message: 'Invalid or expired token' });
+        return res.status(400).json({ success: false, message: 'Invalid or expired token' });
     }
 };
