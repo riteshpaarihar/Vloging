@@ -9,7 +9,8 @@ export const sendResetEmail = async(to, token) => {
         }
     });
 
-    const resetLink = `http://localhost:5173/reset-password/${token}`;
+    //  const resetLink = `http://localhost:5173/reset-password/${token}`;
+    const resetLink = `hhttps://vloging-inky.vercel.app/reset-password/${token}`;
     await transporter.sendMail({
         from: '"Vlogging App" <riteshpaarihar@gmail.com>', // ✅ Properly formatted
         to,
