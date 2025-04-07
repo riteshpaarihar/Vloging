@@ -2,12 +2,14 @@ import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import { motion } from "framer-motion";
-import useAuthStore from "../store/authStore"; // Zustand store
+import { useSelector, useDispatch } from "react-redux";
+import { logout } from "../features/auth/authSlice.js"; // Redux slice
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
-  const { user, logout } = useAuthStore(); // ✅ from Zustand store
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.auth.user);
 
   const toggleMenu = () => setIsOpen(!isOpen);
 
@@ -47,7 +49,7 @@ const Navbar = () => {
           <div className="hidden md:flex items-center gap-4 text-white">
             <span className="text-[#ff4d4d] font-semibold">Hi, {user.firstName} 👋</span>
             <button
-              onClick={logout}
+              onClick={() => dispatch(logout())}
               className="px-3 py-1 border border-white rounded-lg hover:bg-white hover:text-[#1a1a1a] transition"
             >
               Logout
@@ -123,7 +125,7 @@ const Navbar = () => {
               </span>
               <button
                 onClick={() => {
-                  logout();
+                  dispatch(logout());
                   toggleMenu();
                 }}
                 className="px-4 py-2 border border-white text-white rounded-lg hover:bg-white hover:text-[#1a1a1a] transition"

@@ -9,6 +9,8 @@ import PostList from "./pages/PostList.jsx";
 import PostDetails from "./pages/PostDetails.jsx";
 import Login from "./pages/Login.jsx";
 import Register from "./pages/Register.jsx";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   // Dummy components for now
@@ -32,6 +34,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
         </Routes>
+        <ToastContainer position="top-right" autoClose={3000} />
       </div>
       <Footer/>
     </>
