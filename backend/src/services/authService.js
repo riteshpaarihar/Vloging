@@ -81,6 +81,7 @@ export const loginUser = async({ identifier, password }) => {
             username: user.username,
             email: user.email,
             role: user.role,
+            profileImage: user.profileImage,
         },
     };
 };
