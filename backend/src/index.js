@@ -10,13 +10,14 @@ app.use(
     cors({
         origin: [
             "http://localhost:5173",
-            "https://vloging-production.up.railway.app"
+            "https://vloging-inky.vercel.app", // ✅ Your frontend on Vercel
         ],
         credentials: true,
         methods: ["GET", "POST", "PUT", "DELETE"],
         allowedHeaders: ["Content-Type", "Authorization"],
     })
 );
+
 
 // ✅ Middleware to accept different data types
 app.use(express.json()); // application/json
