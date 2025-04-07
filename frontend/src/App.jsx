@@ -11,16 +11,11 @@ import Login from "./pages/Login.jsx";
 import Register from "./pages/Register.jsx";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import ForgotPassword from "./pages/ForgotPassword.jsx";
+import ResetPassword from "./pages/ResetPassword.jsx";
 
 function App() {
-  // Dummy components for now
- // const Home = () => <h1 className="text-center text-2xl mt-10">🏠 Home Page</h1>;
-  //const About = () => <h1 className="text-center text-2xl mt-10">📘 About Page</h1>;
-  //const Contact = () => <h1 className="text-center text-2xl mt-10">📞 Contact Page</h1>;
-  //const Posts = () => <h1 className="text-center text-2xl mt-10">📝 Posts Page</h1>;
-  // const Login = () => <h1 className="text-center text-2xl mt-10">🔐 Login Page</h1>;
-  // const Register = () => <h1 className="text-center text-2xl mt-10">🧾 Register Page</h1>;
-
+  
   return (
     <>
       <Navbar />
@@ -33,6 +28,9 @@ function App() {
           <Route path="/posts/:id" element={<PostDetails />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password/:token" element={<ResetPassword />} />
+
         </Routes>
         <ToastContainer position="top-right" autoClose={3000} />
       </div>
