@@ -13,8 +13,17 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ForgotPassword from "./pages/ForgotPassword.jsx";
 import ResetPassword from "./pages/ResetPassword.jsx";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { loadUserFromStorage } from "./features/auth/authSlice.js";
+
 
 function App() {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(loadUserFromStorage());
+  }, [dispatch]);
   
   return (
     <>

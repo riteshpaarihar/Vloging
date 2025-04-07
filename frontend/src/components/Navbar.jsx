@@ -10,7 +10,7 @@ const Navbar = () => {
   const location = useLocation();
   const dispatch = useDispatch();
   const user = useSelector((state) => state.auth.user);
-
+ // console.log("👤 Navbar user:", user);
   const toggleMenu = () => setIsOpen(!isOpen);
 
   const navLinks = [
@@ -47,7 +47,22 @@ const Navbar = () => {
         {/* Desktop Auth */}
         {user ? (
           <div className="hidden md:flex items-center gap-4 text-white">
-            <span className="text-[#ff4d4d] font-semibold">Hi, {user.firstName} 👋</span>
+            <div className="flex items-center gap-2">
+              <img
+                src={user.profileImage || "/default-avatar.png"}
+                alt="profile"
+                className="w-8 h-8 rounded-full object-cover border border-white"
+              />
+             {/* <span className="text-[#ff4d4d] font-medium">Hi, {user.firstName}</span> */}
+             <motion.span
+      className="text-[#ff4d4d] font-medium"
+      initial={{ width: 0 }}
+      animate={{ width: "auto" }}
+      transition={{ duration: 1.5, ease: "easeInOut" }}
+    >
+    {user.firstName}
+    </motion.span>
+            </div>
             <button
               onClick={() => dispatch(logout())}
               className="px-3 py-1 border border-white rounded-lg hover:bg-white hover:text-[#1a1a1a] transition"
@@ -120,9 +135,16 @@ const Navbar = () => {
         <div className="mt-6 flex flex-col space-y-3">
           {user ? (
             <>
-              <span className="text-[#ff4d4d] font-semibold text-center">
-                Hi, {user.firstName} 👋
-              </span>
+              <div className="flex items-center gap-3 justify-center mb-2">
+                <img
+                  src={user.profileImage || "/https://res.cloudinary.com/dexfdwvgf/image/upload/v1744011946/vlogging_users/jpjfckppxi1efpbt2ah8.webp"}
+                  alt="profile"
+                  className="w-10 h-10 rounded-full object-cover border border-white"
+                />
+                <span className="text-[#ff4d4d] font-medium text-lg">
+                  Hi, {user.firstName}
+                </span>
+              </div>
               <button
                 onClick={() => {
                   dispatch(logout());

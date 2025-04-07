@@ -44,11 +44,12 @@ export const registerUser = createAsyncThunk(
 //   }
 // );
 
+
 export const loginUser = createAsyncThunk(
   "auth/loginUser",
   async ({ identifier, password }, thunkAPI) => {
     try {
-      console.log("Trying to log in with:", { identifier, password });
+    //  console.log("Trying to log in with:", { identifier, password });
 
       const response = await axios.post(
         `/auth/login`,
@@ -57,6 +58,7 @@ export const loginUser = createAsyncThunk(
           withCredentials: true, // ✅ Send cookies
         }
       );
+      console.log("🧪 Login API response:", response.data);
 
       return response.data;
     } catch (error) {
