@@ -1,5 +1,5 @@
 import cloudinary from "../../config/cloudinaryConfig.js";
-import { createPostService } from "../../services/admin/post.service.js";
+import { createPostService, deletePostService, getAllPostsService, getSinglePostService, toggleFeaturePostService, togglePublishPostService, updatePostService } from "../../services/admin/post.service.js";
 
 import slugify from "slugify";
 
@@ -96,5 +96,61 @@ export const createPost = async (req, res) => {
   } catch (err) {
     console.error("🚨 Post creation error:", err);
     res.status(500).json({ success: false, message: err.message });
+  }
+};
+
+
+export const getAllPosts = async (req, res) => {
+  try {
+    const posts = await getAllPostsService();
+    res.status(200).json({ success: true, posts });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
+
+
+export const getSinglePost = async (req, res) => {
+  try {
+    const post = await getSinglePostService(req.params.id);
+    res.status(200).json({ success: true, post });
+  } catch (err) {
+    res.status(404).json({ success: false, message: err.message });
+  }
+};
+
+export const updatePost = async (req, res) => {
+  try {
+    const updatedPost = await updatePostService(req.params.id, req.body);
+    res.status(200).json({ success: true, updatedPost });
+  } catch (err) {
+    res.status(400).json({ success: false, message: err.message });
+  }
+};
+
+export const deletePost = async (req, res) => {
+  try {
+    await deletePostService(req.params.id);
+    res.status(200).json({ success: true, message: "Post deleted successfully" });
+  } catch (err) {
+    res.status(400).json({ success: false, message: err.message });
+  }
+};
+
+export const publishPost = async (req, res) => {
+  try {
+    const post = await togglePublishPostService(req.params.id);
+    res.status(200).json({ success: true, post });
+  } catch (err) {
+    res.status(400).json({ success: false, message: err.message });
+  }
+};
+
+export const featurePost = async (req, res) => {
+  try {
+    const post = await toggleFeaturePostService(req.params.id);
+    res.status(200).json({ success: true, post });
+  } catch (err) {
+    res.status(400).json({ success: false, message: err.message });
   }
 };
