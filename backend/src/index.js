@@ -3,6 +3,7 @@ import connectDb from './config/dbConfig.js';
 import { PORT } from './config/serverConfig.js';
 import cors from 'cors';
 import apiRoutes from './routes/apiRoutes.js';
+import adminApiRoutes from './routes/adminApiRoutes.js';
 import cookieParser from "cookie-parser";
 const app = express();
 // ✅ CORS Setup (for local + live frontend)
@@ -29,6 +30,9 @@ app.use(cookieParser());
 
 // ✅ API routes
 app.use('/api', apiRoutes);
+
+// ✅ Admin routes
+app.use('/admin', adminApiRoutes);
 
 // ✅ Vlogging check route
 app.use('/', (req, res) => {

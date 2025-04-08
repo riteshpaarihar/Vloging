@@ -10,8 +10,9 @@ import {
     commentOnPost,
     likeComment,
 } from '../../controllers/commentController.js';
+import { upload } from '../../middleware/upload.js';
 
-import upload from '../../middleware/upload.js';
+
 // Define the routes for the post controller
 const router = express.Router();
 //👈 All users can fetch all posts

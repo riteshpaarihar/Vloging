@@ -35,7 +35,7 @@ export const createPost = async (req, res) => {
   };
   
 
-  export const getAllPosts = async (req, res) => {
+export const getAllPosts = async (req, res) => {
   try {
     const posts = await handleGetAllPosts();
     res.status(200).json({ success: true, posts });
