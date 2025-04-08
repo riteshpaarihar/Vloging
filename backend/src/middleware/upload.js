@@ -12,13 +12,12 @@ const storage = multer.diskStorage({
 });
 
 export const upload = multer({
-    storage,
+    storage: multer.memoryStorage(), // 👈 Use memory
     limits: { fileSize: 5 * 1024 * 1024 },
     fileFilter: (req, file, cb) => {
         const fileTypes = /jpeg|jpg|png|webp/;
-        const isValidExt = fileTypes.test(path.extname(file.originalname).toLowerCase());
+        const isValidExt = fileTypes.test(file.originalname.toLowerCase());
         const isValidMime = fileTypes.test(file.mimetype);
-
         if (isValidExt && isValidMime) cb(null, true);
         else cb(new Error("Only image files are allowed!"));
     },

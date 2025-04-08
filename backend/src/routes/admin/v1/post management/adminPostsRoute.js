@@ -1,13 +1,15 @@
 import express from 'express';
-import { createPost } from '../../../../controllers/postController.js';
+
 import { isAdmin, isAuthenticated } from '../../../../middleware/isAuthenticated.js';
 import { upload } from '../../../../middleware/upload.js';
+import { createPost } from '../../../../controllers/admin/post.controller.js';
 
 // Adjust path if needed
 
 const routes = express.Router();
 
 // ✅ Admin Post Routes
+
 routes.post('/', isAuthenticated, isAdmin, upload.single("imageUrl"), createPost); // Create a new post
 // routes.get('/posts', getAllPosts); // Get all posts
 // routes.get('/posts/:id', getSinglePost); // Get a specific post by ID

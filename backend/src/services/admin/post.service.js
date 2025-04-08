@@ -1,4 +1,4 @@
-import { createPostInDB } from "../../repository/admin/post.repository";
+import { createPostInDB } from "../../repository/admin/post.repository.js";
 
 import slugify from "slugify";
 

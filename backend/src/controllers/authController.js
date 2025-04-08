@@ -10,9 +10,11 @@ export const register = async (req, res) => {
 
         const userData = {
             ...req.body,
-            profileImagePath: req.file?.path, // ✅ Add local file path for cloudinary upload
+           // profileImagePath: req.file?.path, // ✅ Add local file path for cloudinary upload
+           profileImageBuffer: req.file?.buffer,
         };
 
+       
         const user = await registerUser(userData);
 
         res.status(201).json({
