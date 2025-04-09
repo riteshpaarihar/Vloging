@@ -1,14 +1,17 @@
-import express from 'express';
+// routes/admin/settings.routes.js
 import {
-    toggleFeature,
     getSiteSettings,
-    updateSiteSettings
-} from '../controllers/admin/settings.controller.js';
+    updateSiteSettings,
+    toggleFeature
+} from '../../../../controllers/admin/siteSettings.controller.js';
 
-const routes = express.Router();
+import express from 'express';
+import { isAdmin, isAuthenticated } from '../../../../middleware/isAuthenticated.js';
 
-routes.get('/settings', getSiteSettings); // Fetch current settings
-routes.put('/settings', updateSiteSettings); // Update site settings
-routes.patch('/features/:feature/toggle', toggleFeature); // Toggle feature on/off (like featured vlogs, maintenance mode etc.)
+const router = express.Router();
 
-export default routes;
+router.get('/', isAuthenticated, isAdmin, getSiteSettings); // ✅ Get current settings
+router.put('/', isAuthenticated, isAdmin, updateSiteSettings); // ✅ Update settings or create
+router.patch('/features/:feature/toggle', isAuthenticated, isAdmin, toggleFeature); // ✅ Toggle boolean feature
+
+export default router;
