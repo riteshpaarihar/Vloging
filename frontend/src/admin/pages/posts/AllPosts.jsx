@@ -1,4 +1,4 @@
-// src/admin/pages/posts/AllPosts.jsx
+
 import React, { useEffect, useState } from "react";
 import {
   Box,
@@ -15,11 +15,10 @@ import {
   TablePagination,
   Button,
   Chip,
-  CircularProgress,
 } from "@mui/material";
-import { Edit, Delete, Visibility } from "@mui/icons-material";
+import { Edit, Delete, Visibility, Refresh } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
-import { getAllPosts } from "../../services/adminPostService"; // ✅ import service
+import { getAllPosts } from "../../services/adminPostService";
 import Loader from "../../components/Loader";
 
 const AllPosts = () => {
@@ -29,26 +28,31 @@ const AllPosts = () => {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchPosts = async () => {
-      try {
-        const data = await getAllPosts();
-        // Safe-check: ensure data and data.posts exist
-        if (data && Array.isArray(data.posts)) {
-          setPosts(data.posts);
-        } else {
-          console.error("Unexpected response format:", data);
-          setPosts([]); // fallback to empty array
-        }
-      } catch (err) {
-        console.error("Error fetching posts:", err);
+  const fetchPosts = async () => {
+    setLoading(true);
+    try {
+      const data = await getAllPosts();
+      if (data && Array.isArray(data.posts)) {
+        setPosts(data.posts);
+      } else {
+        console.error("Unexpected response format:", data);
         setPosts([]);
-      } finally {
-        setLoading(false);
       }
-    };
+    } catch (err) {
+      console.error("Error fetching posts:", err);
+      setPosts([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
     fetchPosts();
   }, []);
+
+  const handleRefresh = () => {
+    fetchPosts();
+  };
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -59,11 +63,7 @@ const AllPosts = () => {
     setPage(0);
   };
 
-  if (loading) {
-    return (
-      <Loader/>
-    );
-  }
+  if (loading) return <Loader />;
 
   return (
     <Box p={3}>
@@ -76,13 +76,20 @@ const AllPosts = () => {
         <Typography variant="h5" fontWeight={600}>
           All Posts
         </Typography>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => navigate("/admin/posts/create")}
-        >
-          Create New Post
-        </Button>
+        <Box display="flex" gap={1}>
+          <Tooltip title="Refresh">
+            <IconButton color="primary" onClick={handleRefresh}>
+              <Refresh />
+            </IconButton>
+          </Tooltip>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => navigate("/admin/post/create")}
+          >
+            Create New Post
+          </Button>
+        </Box>
       </Box>
 
       <Paper elevation={1}>
@@ -97,47 +104,46 @@ const AllPosts = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {Array.isArray(posts) &&
-                posts
-                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map((post) => (
-                    <TableRow key={post._id}>
-                      <TableCell>{post.title}</TableCell>
-                      <TableCell>
-                        <Chip
-                          label={post.isPublished ? "Published" : "Draft"}
-                          color={post.isPublished ? "success" : "default"}
-                          size="small"
-                        />
-                      </TableCell>
-                      <TableCell>
-                        {new Date(post.createdAt).toLocaleDateString()}
-                      </TableCell>
-                      <TableCell align="right">
-                        <Tooltip title="View">
-                          <IconButton
-                            onClick={() => navigate(`/admin/post/${post._id}`)}
-                          >
-                            <Visibility fontSize="small" />
-                          </IconButton>
-                        </Tooltip>
-                        <Tooltip title="Edit">
-                          <IconButton
-                            onClick={() =>
-                              navigate(`/admin/post/${post._id}`)
-                            }
-                          >
-                            <Edit fontSize="small" />
-                          </IconButton>
-                        </Tooltip>
-                        <Tooltip title="Delete">
-                          <IconButton color="error">
-                            <Delete fontSize="small" />
-                          </IconButton>
-                        </Tooltip>
-                      </TableCell>
-                    </TableRow>
-                  ))}
+              {posts
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map((post) => (
+                  <TableRow key={post._id}>
+                    <TableCell>{post.title}</TableCell>
+                    <TableCell>
+                      <Chip
+                        label={post.isPublished ? "Published" : "Draft"}
+                        color={post.isPublished ? "success" : "default"}
+                        size="small"
+                      />
+                    </TableCell>
+                    <TableCell>
+                      {new Date(post.createdAt).toLocaleDateString()}
+                    </TableCell>
+                    <TableCell align="right">
+                      <Tooltip title="View">
+                        <IconButton
+                          onClick={() => navigate(`/admin/post/${post._id}`)}
+                        >
+                          <Visibility fontSize="small" />
+                        </IconButton>
+                      </Tooltip>
+                      <Tooltip title="Edit">
+                        <IconButton
+                          onClick={() =>
+                            navigate(`/admin/post/${post._id}`)
+                          }
+                        >
+                          <Edit fontSize="small" />
+                        </IconButton>
+                      </Tooltip>
+                      <Tooltip title="Delete">
+                        <IconButton color="error">
+                          <Delete fontSize="small" />
+                        </IconButton>
+                      </Tooltip>
+                    </TableCell>
+                  </TableRow>
+                ))}
             </TableBody>
           </Table>
         </TableContainer>

@@ -18,16 +18,14 @@ import AdminRoutes from "./admin/route/AdminRoutes.jsx";
 
  // ✅ import admin routes
 
-function App() {
+ function App() {
   const dispatch = useDispatch();
-  const location = useLocation(); // 👈 Get current route
+  const location = useLocation();
+  const isAdminRoute = location.pathname.startsWith("/admin");
 
   useEffect(() => {
     dispatch(loadUserFromStorage());
   }, [dispatch]);
-
-  // Check if current route is an admin route
-  const isAdminRoute = location.pathname.startsWith("/admin");
 
   return (
     <>
@@ -48,11 +46,13 @@ function App() {
               <Route path="/forgot-password" element={<ForgotPassword />} />
               <Route path="/reset-password/:token" element={<ResetPassword />} />
             </Routes>
-            <ToastContainer position="top-right" autoClose={3000} />
           </div>
           <Footer />
         </>
       )}
+
+      {/* ✅ Always render ToastContainer */}
+      <ToastContainer position="top-right" autoClose={3000} />
     </>
   );
 }

@@ -10,7 +10,13 @@ import {
 export const fetchUsers = createAsyncThunk("admin/fetchUsers", getAllUsers);
 export const fetchUser = createAsyncThunk("admin/fetchUser", getSingleUser);
 export const removeUser = createAsyncThunk("admin/removeUser", deleteUser);
-export const resetPassword = createAsyncThunk("admin/resetPassword", resetUserPassword);
+//export const resetPassword = createAsyncThunk("admin/resetPassword", resetUserPassword);
+export const resetPassword = createAsyncThunk(
+    "admin/resetPassword",
+    async({ id, data }) => {
+        return await resetUserPassword(id, data);
+    }
+);
 
 const adminUserSlice = createSlice({
     name: "adminUsers",
@@ -45,9 +51,21 @@ const adminUserSlice = createSlice({
         })
 
         // Reset Password
-        .addCase(resetPassword.fulfilled, (state, action) => {
-            console.log("Password reset success:", action.payload);
-        });
+        .addCase(resetPassword.pending, (state) => {
+                state.loading = true;
+                state.successMessage = null;
+                state.error = null;
+            })
+            .addCase(resetPassword.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.error.message;
+            })
+            .addCase(resetPassword.fulfilled, (state) => {
+                state.loading = false;
+                state.successMessage = "Password reset successfully";
+            });
+
+
     }
 });
 

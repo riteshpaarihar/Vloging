@@ -6,14 +6,13 @@ import AllPosts from "../pages/posts/AllPosts";
 import CreatePostPage from "../pages/posts/CreatePost";
 import SinglePostView from "../pages/posts/SinglePostView";
 import EditPost from "../pages/posts/EditPost";
-import AllUsers from "../pages/posts/AllUsers";
-import SingleUserView from "../pages/posts/SingleUserView";
 
-// Admin pages
+import AllMessages from "../pages/massages/AllMessages";
+import SingleMessage from "../pages/massages/SingleMessage";
+import AllUsers from "../pages/users/AllUsers";
+import SingleUserView from "../pages/users/SingleUserView";
 
-// import EditPost from "../pages/Posts/EditPost";
-// import SinglePost from "../pages/Posts/SinglePost";
-// import other admin pages as needed
+
 
 const AdminRoutes = () => {
   return (
@@ -24,8 +23,9 @@ const AdminRoutes = () => {
          <Route path="post/:id" element={<SinglePostView />} />
          <Route path="post/:id" element={<EditPost />} />
          <Route path="/admin/users" element={<AllUsers />} />
-         <Route path="/admin/users/:id" element={<SingleUserView />} />
-
+         <Route path="/admin/users/:id" element={<SingleUserView/>} />
+         <Route path="/admin/messages" element={<AllMessages />} />
+         <Route path="/admin/messages/:id/read" element={<SingleMessage />} />
       </Route>
     </Routes>
   );

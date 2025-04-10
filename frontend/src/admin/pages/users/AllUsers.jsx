@@ -1,7 +1,6 @@
 
 // import React, { useEffect, useState } from "react";
 // import { useDispatch, useSelector } from "react-redux";
-
 // import {
 //   Box,
 //   Typography,
@@ -11,8 +10,6 @@
 //   TableHead,
 //   TableRow,
 //   IconButton,
-//   Snackbar,
-//   Alert,
 //   Tooltip,
 //   MenuItem,
 //   Select,
@@ -26,6 +23,7 @@
 // import LockResetIcon from "@mui/icons-material/LockReset";
 // import { fetchUsers, removeUser, resetPassword } from "../../store/slices/adminUserSlice";
 // import Loader from "../../components/Loader";
+// import Popup from "../../components/Popup";
 
 // const AllUsers = () => {
 //   const dispatch = useDispatch();
@@ -64,7 +62,7 @@
 
 //   const handleRowsPerPageChange = (e) => {
 //     setRowsPerPage(Number(e.target.value));
-//     setCurrentPage(1); // Reset to first page when limit changes
+//     setCurrentPage(1);
 //   };
 
 //   const handlePageChange = (_, value) => {
@@ -79,15 +77,12 @@
 //     <Box p={4}>
 //       <Typography variant="h4" mb={2}>User Management</Typography>
 
-//       <Snackbar
+//       <Popup
 //         open={snackbar.open}
-//         autoHideDuration={3000}
+//         severity={snackbar.severity}
+//         message={snackbar.message}
 //         onClose={() => setSnackbar({ ...snackbar, open: false })}
-//       >
-//         <Alert severity={snackbar.severity} onClose={() => setSnackbar({ ...snackbar, open: false })}>
-//           {snackbar.message}
-//         </Alert>
-//       </Snackbar>
+//       />
 
 //       <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
 //         <FormControl size="small">
@@ -114,9 +109,9 @@
 //       </Box>
 
 //       {loading ? (
-//         <Loader/>
+//         <Loader />
 //       ) : error ? (
-//         <p>Error: {error}</p>
+//         <Typography color="error">Error: {error}</Typography>
 //       ) : (
 //         <Table>
 //           <TableHead>
@@ -161,7 +156,6 @@
 
 // export default AllUsers;
 
-
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -179,14 +173,24 @@ import {
   Pagination,
   FormControl,
   InputLabel,
+  Snackbar,
+  Alert,
+  Stack,
+  Dialog,
+  OutlinedInput,
+  Button,
+  InputAdornment,
 } from "@mui/material";
 import { Link } from "react-router-dom";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import DeleteIcon from "@mui/icons-material/Delete";
 import LockResetIcon from "@mui/icons-material/LockReset";
+import RefreshIcon from "@mui/icons-material/Refresh";
+import CloseIcon from "@mui/icons-material/Close";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { fetchUsers, removeUser, resetPassword } from "../../store/slices/adminUserSlice";
 import Loader from "../../components/Loader";
-import Popup from "../../components/Popup";
 
 const AllUsers = () => {
   const dispatch = useDispatch();
@@ -196,8 +200,18 @@ const AllUsers = () => {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
 
-  useEffect(() => {
+  // Password Reset Dialog State
+  const [openResetDialog, setOpenResetDialog] = useState(false);
+  const [selectedUserId, setSelectedUserId] = useState(null);
+  const [newPassword, setNewPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+
+  const loadUsers = () => {
     dispatch(fetchUsers());
+  };
+
+  useEffect(() => {
+    loadUsers();
   }, [dispatch]);
 
   const handleDelete = async (id) => {
@@ -211,15 +225,20 @@ const AllUsers = () => {
     }
   };
 
-  const handleResetPassword = async (id) => {
-    const newPassword = prompt("Enter new password:");
-    if (newPassword) {
-      try {
-        await dispatch(resetPassword(id, { password: newPassword })).unwrap();
-        setSnackbar({ open: true, message: "Password reset successfully", severity: "success" });
-      } catch (err) {
-        setSnackbar({ open: true, message: err.message || "Reset failed", severity: "error" });
-      }
+  const handleResetPassword = (userId) => {
+    setSelectedUserId(userId);
+    setOpenResetDialog(true);
+  };
+
+  const handleResetSubmit = async () => {
+    try {
+      await dispatch(resetPassword({ id: selectedUserId, data: { password: newPassword } })).unwrap();
+      setSnackbar({ open: true, message: "Password reset successfully", severity: "success" });
+      setOpenResetDialog(false);
+      setNewPassword("");
+      setShowPassword(false);
+    } catch (err) {
+      setSnackbar({ open: true, message: err.message || "Reset failed", severity: "error" });
     }
   };
 
@@ -238,17 +257,71 @@ const AllUsers = () => {
 
   return (
     <Box p={4}>
-      <Typography variant="h4" mb={2}>User Management</Typography>
+      <Typography variant="h4" mb={3} fontWeight={600}>User Management</Typography>
 
-      <Popup
+      <Snackbar
         open={snackbar.open}
-        severity={snackbar.severity}
-        message={snackbar.message}
+        autoHideDuration={4000}
         onClose={() => setSnackbar({ ...snackbar, open: false })}
-      />
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert severity={snackbar.severity} onClose={() => setSnackbar({ ...snackbar, open: false })}>
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
 
-      <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
-        <FormControl size="small">
+      {/* Password Reset Dialog */}
+      <Dialog open={openResetDialog} onClose={() => setOpenResetDialog(false)}>
+        <Box p={3} sx={{ minWidth: 300, position: "relative" }}>
+          {/* Close icon */}
+          <IconButton
+            onClick={() => setOpenResetDialog(false)}
+            sx={{ position: "absolute", top: 8, right: 8 }}
+          >
+            <CloseIcon />
+          </IconButton>
+
+          <Typography variant="h6" mb={2}>Reset Password</Typography>
+
+          <FormControl fullWidth variant="outlined">
+            <InputLabel htmlFor="new-password">New Password</InputLabel>
+            <OutlinedInput
+              id="new-password"
+              type={showPassword ? "text" : "password"}
+              label="New Password"
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+              endAdornment={
+                <InputAdornment position="end">
+                  <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              }
+            />
+          </FormControl>
+
+          <Stack direction="row" justifyContent="flex-end" mt={3} spacing={2}>
+            <Button onClick={() => setOpenResetDialog(false)} color="inherit" variant="outlined">Cancel</Button>
+            <Button
+              onClick={handleResetSubmit}
+              variant="contained"
+              disabled={!newPassword.trim()}
+            >
+              Reset
+            </Button>
+          </Stack>
+        </Box>
+      </Dialog>
+
+      <Stack
+        direction={{ xs: "column", sm: "row" }}
+        justifyContent="space-between"
+        alignItems={{ xs: "flex-start", sm: "center" }}
+        mb={2}
+        spacing={2}
+      >
+        <FormControl size="small" sx={{ minWidth: 120 }}>
           <InputLabel id="rows-select-label">Rows</InputLabel>
           <Select
             labelId="rows-select-label"
@@ -262,27 +335,35 @@ const AllUsers = () => {
           </Select>
         </FormControl>
 
-        <Pagination
-          count={totalPages}
-          page={currentPage}
-          onChange={handlePageChange}
-          color="primary"
-          variant="outlined"
-        />
-      </Box>
+        <Box display="flex" alignItems="center" gap={2}>
+          <Pagination
+            count={totalPages}
+            page={currentPage}
+            onChange={handlePageChange}
+            color="primary"
+            variant="outlined"
+            shape="rounded"
+          />
+          <Tooltip title="Refresh">
+            <IconButton onClick={loadUsers} color="primary">
+              <RefreshIcon />
+            </IconButton>
+          </Tooltip>
+        </Box>
+      </Stack>
 
       {loading ? (
         <Loader />
       ) : error ? (
         <Typography color="error">Error: {error}</Typography>
       ) : (
-        <Table>
-          <TableHead>
+        <Table sx={{ bgcolor: "#fff", borderRadius: 2, boxShadow: 2 }}>
+          <TableHead sx={{ bgcolor: "#f0f0f0" }}>
             <TableRow>
-              <TableCell>Username</TableCell>
-              <TableCell>Email</TableCell>
-              <TableCell>Role</TableCell>
-              <TableCell align="center">Actions</TableCell>
+              <TableCell><strong>Username</strong></TableCell>
+              <TableCell><strong>Email</strong></TableCell>
+              <TableCell><strong>Role</strong></TableCell>
+              <TableCell align="center"><strong>Actions</strong></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
