@@ -10,7 +10,7 @@ const Navbar = () => {
   const location = useLocation();
   const dispatch = useDispatch();
   const user = useSelector((state) => state.auth.user);
- // console.log("👤 Navbar user:", user);
+  // console.log("👤 Navbar user:", user);
   const toggleMenu = () => setIsOpen(!isOpen);
 
   const navLinks = [
@@ -53,15 +53,15 @@ const Navbar = () => {
                 alt="profile"
                 className="w-8 h-8 rounded-full object-cover border border-white"
               />
-             {/* <span className="text-[#ff4d4d] font-medium">Hi, {user.firstName}</span> */}
-             <motion.span
-      className="text-[#ff4d4d] font-medium"
-      initial={{ width: 0 }}
-      animate={{ width: "auto" }}
-      transition={{ duration: 1.5, ease: "easeInOut" }}
-    >
-    {user.firstName}
-    </motion.span>
+              {/* <span className="text-[#ff4d4d] font-medium">Hi, {user.firstName}</span> */}
+              <motion.span
+                className="text-[#ff4d4d] font-medium"
+                initial={{ width: 0 }}
+                animate={{ width: "auto" }}
+                transition={{ duration: 1.5, ease: "easeInOut" }}
+              >
+                {user.firstName}
+              </motion.span>
             </div>
             <button
               onClick={() => dispatch(logout())}
@@ -111,7 +111,10 @@ const Navbar = () => {
         transition={{ type: "spring", stiffness: 80 }}
         className="fixed top-0 right-0 w-3/4 sm:w-1/2 h-full bg-[#1a1a1a] shadow-lg z-50 p-6 flex flex-col"
       >
-        <button className="absolute top-4 right-4 text-white" onClick={toggleMenu}>
+        <button
+          className="absolute top-4 right-4 text-white"
+          onClick={toggleMenu}
+        >
           <X size={28} />
         </button>
 
@@ -137,7 +140,10 @@ const Navbar = () => {
             <>
               <div className="flex items-center gap-3 justify-center mb-2">
                 <img
-                  src={user.profileImage || "/https://res.cloudinary.com/dexfdwvgf/image/upload/v1744011946/vlogging_users/jpjfckppxi1efpbt2ah8.webp"}
+                  src={
+                    user.profileImage ||
+                    "/https://res.cloudinary.com/dexfdwvgf/image/upload/v1744011946/vlogging_users/jpjfckppxi1efpbt2ah8.webp"
+                  }
                   alt="profile"
                   className="w-10 h-10 rounded-full object-cover border border-white"
                 />
