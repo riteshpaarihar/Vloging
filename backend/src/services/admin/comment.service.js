@@ -16,27 +16,15 @@ import Comment from "../../schemas/commentSchema.js";
 //     };
 // };
 
-export const getAllCommentsService = async(page = 1, limit = 10) => {
-    const skip = (page - 1) * limit;
-
-    const [comments, total] = await Promise.all([
-        Comment.find()
-        .populate("user", "username") // ✅ only get the username
-        .populate("post", "title") // ✅ only get the title
-        .populate("user", "firstName lastName")
-        .sort({ createdAt: -1 })
-        .skip(skip)
-        .limit(limit),
-        Comment.countDocuments(),
-    ]);
-
-    const pages = Math.ceil(total / limit);
+export const getAllCommentsService = async() => {
+    const comments = await Comment.find()
+        .populate("user", "firstName lastName username") // merged to avoid multiple calls
+        .populate("post", "title")
+        .sort({ createdAt: -1 });
 
     return {
         comments,
-        total,
-        page: Number(page),
-        pages,
+        total: comments.length,
     };
 };
 export const deleteCommentService = async(id) => {
