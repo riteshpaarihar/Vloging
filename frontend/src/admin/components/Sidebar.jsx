@@ -72,7 +72,7 @@ const Sidebar = ({ mobileOpen, onSidebarToggle }) => {
         {/* Helper for items */}
         {[
           {
-            to: "/admin",
+            to: "/admin/dashboard",
             icon: <DashboardIcon />,
             label: "Dashboard",
           },

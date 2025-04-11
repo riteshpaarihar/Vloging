@@ -35,7 +35,7 @@ const remove = async (id) => {
 
 const toggleRead = async (id) => {
   try {
-    const res = await api.patch(`/admin/messages/${id}/toggle-read`);
+    const res = await api.patch(`/admin/messages/${id}/read`);
     toast.success("Message status updated");
     return res.data.data;
   } catch (error) {
