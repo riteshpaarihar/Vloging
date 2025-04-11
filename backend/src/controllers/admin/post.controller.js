@@ -111,6 +111,7 @@ export const getAllPosts = async (req, res) => {
 
 
 export const getSinglePost = async (req, res) => {
+
   try {
     const post = await getSinglePostService(req.params.id);
     res.status(200).json({ success: true, post });
