@@ -7,7 +7,7 @@ const postSchema = new mongoose.Schema({
         required: [true, "Post title is required"],
         trim: true,
         minlength: 3,
-        maxlength: 100,
+        maxlength: 250,
         unique: true,
     },
 
