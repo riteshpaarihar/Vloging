@@ -5,6 +5,7 @@ import cors from 'cors';
 import apiRoutes from './routes/apiRoutes.js';
 import adminApiRoutes from './routes/adminApiRoutes.js';
 import cookieParser from "cookie-parser";
+import morgan from 'morgan'
 const app = express();
 // ✅ CORS Setup (for local + live frontend)
 app.use(
@@ -25,6 +26,7 @@ app.use(express.json()); // application/json
 app.use(express.urlencoded({ extended: true })); // application/x-www-form-urlencoded
 app.use(express.text()); // text/plain
 app.use(cookieParser());
+app.use(morgan('dev'));
 
 // ✅ Routes
 

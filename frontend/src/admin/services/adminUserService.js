@@ -78,7 +78,7 @@ export const deleteUser = async (id) => {
 
 export const resetUserPassword = async (id, data) => {
     try {
-      const res = await axios.post(`/admin/users/${id}/reset-password`, data); // ✅ plural "users"
+      const res = await axios.post(`/admin/user/${id}/reset-password`, data); // ✅ plural "users"
       toast.success("Password reset successfully");
       return res.data;
     } catch (error) {
