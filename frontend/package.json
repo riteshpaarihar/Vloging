@@ -25,6 +25,7 @@
         "@tiptap/extension-table-row": "^2.11.7",
         "axios": "^1.8.4",
         "dayjs": "^1.11.13",
+        "dompurify": "^3.2.5",
         "dotenv": "^16.4.7",
         "framer-motion": "^12.6.3",
         "js-cookie": "^3.0.5",
