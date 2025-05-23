@@ -1,7 +1,8 @@
 import axios from "axios";
 
 const API_BASE_URL =
-    import.meta.env.VITE_API_URL || "https://vloging-production.up.railway.app/api";
+    // import.meta.env.VITE_API_URL || "https://vloging-production.up.railway.app/api";
+    import.meta.env.VITE_API_URL || "https://vloging.onrender.com/api";
 //import.meta.env.VITE_API_URL || "http://localhost:5000/api";
 // ✅ GOOD PART
 const axiosInstance = axios.create({
