@@ -1,8 +1,12 @@
 # Build Stage
-FROM node:18 AS build
+FROM node:20 AS build
 WORKDIR /app
-COPY package.json package-lock.json ./
-RUN npm install
+
+# Only re-run npm install when dependencies change
+COPY package*.json ./
+RUN npm ci
+
+# Now copy the rest of the files
 COPY . .
 RUN npm run build
 
