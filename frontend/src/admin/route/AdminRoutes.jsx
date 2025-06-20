@@ -24,7 +24,7 @@ const AdminRoutes = () => {
          <Route path="post/create" element={<CreatePostPage />} />
                  {/* Users */}
          <Route path="post/:id" element={<SinglePostView />} />
-         <Route path="post/:id" element={<EditPost />} />
+         <Route path="post/edit/:id" element={<EditPost />} />
          <Route path="/admin/users" element={<AllUsers />} />
           {/* Messages */}
          <Route path="/admin/users/:id" element={<SingleUserView/>} />
