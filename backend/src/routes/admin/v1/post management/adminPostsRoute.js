@@ -15,7 +15,7 @@ routes.post('/', isAuthenticated, isAdmin, upload.single("imageUrl"), createPost
 routes.get('/', isAuthenticated, isAdmin, getAllPosts); // Get all posts
 
 routes.get('/:id', isAuthenticated, isAdmin, getSinglePost); // Get a specific post by ID
-routes.put('/:id', isAuthenticated, isAdmin, updatePost); // Update a post
+routes.put('/edit/:id', isAuthenticated, isAdmin, updatePost); // Update a post
 routes.delete('/:id', isAuthenticated, isAdmin, deletePost);; // Delete a post
 routes.patch('/:id/publish', isAuthenticated, isAdmin, publishPost); // Publish / Unpublish post
 routes.patch('/:id/feature', isAuthenticated, isAdmin, featurePost); // Feature / Unfeature post
