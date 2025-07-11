@@ -167,7 +167,7 @@ const postSchema = new mongoose.Schema({
 
     imageUrl: {
         type: String,
-        default: "",
+        default: "https://res.cloudinary.com/dexfdwvgf/image/upload/v1744464318/vlogging_posts/ctxz4hic2qivhy7rekwp.png",
         validate: {
             validator: function(value) {
                 return value ? /^https?:\/\/.*\.(jpg|jpeg|png|gif)$/i.test(value) : true;

@@ -47,7 +47,7 @@ const userSchema = new mongoose.Schema({
     },
     profileImage: {
         type: String, // Cloudinary URL
-        default: "https://res.cloudinary.com/dexfdwvgf/image/upload/v1743919652/vlogging_users/s4w0u7reyxmp5gkklfdo.webp", // optional default avatar
+        default: "https://res.cloudinary.com/dexfdwvgf/image/upload/v1722063763/be3nhcda5ljrjc6zdlxe.png", // optional default avatar
     },
     bio: {
         type: String,
